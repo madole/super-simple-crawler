@@ -1,9 +1,11 @@
 import cheerio from 'cheerio-without-node-native';
 
 export async function fetchUrl(url) {
+  const timeStart = Date.now();
   const res = await fetch(url);
+  const responseTime = Date.now() - timeStart;
   const body = await res.text();
-  return { res, body };
+  return { res, body, responseTime };
 }
 
 export function parseUrlsFromBody(body) {

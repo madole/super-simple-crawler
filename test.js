@@ -16,14 +16,14 @@ test('should throw an error when no url passed', async t => {
 
 test('fetchUrl returns a body and respose object', async t => {
   const url = 'http://whiskeynerds.com';
-  const { res, body } = await fetchUrl(url);
+  const { res, body, responseTime } = await fetchUrl(url);
   t.truthy(res);
   t.truthy(body);
+  t.truthy(responseTime);
 });
 
 test('should parse url from body', t => {
   const body = '<html><head></head><body><a href="/whiskey" /><a href="/rum" /></body></html>';
   const urls = parseUrlsFromBody(body);
-  console.log(urls);
   t.truthy(urls.length === 2);
 });
