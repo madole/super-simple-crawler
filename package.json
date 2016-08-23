@@ -1,0 +1,41 @@
+{
+  "name": "super-simple-crawler",
+  "version": "1.0.0",
+  "description": "Super simple website crawler with no node dependencies",
+  "main": "index.js",
+  "scripts": {
+    "test": "nyc ava test.js",
+    "build": "babel src -d lib"
+  },
+  "author": "Andrew McDowell <madoliole@gmail.com> (http://madole.github.io/)",
+  "license": "ISC",
+  "devDependencies": {
+    "ava": "^0.16.0",
+    "babel-cli": "^6.11.4",
+    "babel-eslint": "^6.1.2",
+    "babel-plugin-transform-async-to-generator": "^6.8.0",
+    "babel-plugin-transform-runtime": "^6.12.0",
+    "babel-preset-es2015-node4": "^2.1.0",
+    "eslint": "^3.3.1",
+    "eslint-config-airbnb-base": "^5.0.3",
+    "eslint-plugin-import": "^1.14.0",
+    "fetch-mock": "^5.1.1",
+    "nyc": "^8.1.0",
+    "sinon": "^1.17.5"
+  },
+  "ava": {
+    "files": [
+      "test.js"
+    ],
+    "source": [
+      "src/**/*.js"
+    ],
+    "require": [
+      "babel-register"
+    ]
+  },
+  "dependencies": {
+    "babel-runtime": "^6.11.6",
+    "cheerio-without-node-native": "^0.20.1"
+  }
+}
