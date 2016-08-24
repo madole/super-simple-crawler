@@ -4,14 +4,18 @@ import fetchMock from 'fetch-mock';
 import crawler, { fetchUrl, parseUrlsFromBody } from './src/index';
 
 fetchMock
-    .mock('http://whiskeynerds.com', { status: 200, body: 'asdasdhjkashjdasjh' });
+    .mock('http://whiskeynerds.com', { status: 200, body: '<html><head></head><body><a href="/whiskey" /><a href="/rum" /></body></html>' });
 
 test('should throw an error when no url passed', async t => {
   try {
-    await crawler({ depthLimit: 'x', interval: 'x' });
+    await crawler({ depthLimit: 'x' });
   } catch (err) {
     t.truthy(err instanceof Error);
   }
+});
+
+test('should be fine', t => {
+  crawler({ url: 'http://whiskeynerds.com', maxDepthLimit: 2 });
 });
 
 test('fetchUrl returns a body and respose object', async t => {
