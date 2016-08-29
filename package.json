@@ -4,7 +4,7 @@
   "description": "Super simple website crawler with no node dependencies",
   "main": "index.js",
   "scripts": {
-    "test": "nyc ava test.js",
+    "test": "nyc ava test/*.js",
     "build": "babel src -d lib"
   },
   "author": "Andrew McDowell <madoliole@gmail.com> (http://madole.github.io/)",
@@ -36,8 +36,11 @@
   },
   "dependencies": {
     "async": "^2.0.1",
+    "babel-preset-es2017": "^6.14.0",
     "babel-runtime": "^6.11.6",
     "cheerio-without-node-native": "^0.20.1",
+    "drip": "^1.4.0",
+    "eventemitter": "^0.3.3",
     "lodash": "^4.15.0"
   }
 }
