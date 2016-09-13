@@ -1,13 +1,18 @@
 import cheerio from 'cheerio-without-node-native';
 import { queue } from 'async';
-import fetch from 'node-fetch';
-import { EventEmitter } from 'drip';
+import EventEmitter from 'eventemitter3';
 import _ from 'lodash';
+import fetch from 'node-fetch';
 
 
 export async function fetchUrl(url) {
   const timeStart = Date.now();
-  const res = await fetch(url);
+  let res;
+  try {
+    res = await fetch(url);
+  } catch (err) {
+    console.error(err);
+  }
   const responseTime = Date.now() - timeStart;
   const body = await res.text();
   return { res, body, responseTime };
@@ -23,7 +28,8 @@ export function parseUrlsFromBody(body) {
 }
 
 function filterInternalUrls(baseUrl, urls) {
-  return urls.filter(url =>
+  const compactedUrls = _.compact(urls);
+  return compactedUrls.filter(url =>
       (url.startsWith(baseUrl) && url !== baseUrl && url !== `${baseUrl}/`) || url.startsWith('/'));
 }
 
@@ -45,6 +51,7 @@ export default function crawler({ url, maxDepthLimit = 2 }) {
     try {
       result = await fetchUrl(task.url);
     } catch (err) {
+      console.error(err.stack);
       return callback(err);
     }
 
@@ -78,11 +85,10 @@ export default function crawler({ url, maxDepthLimit = 2 }) {
     return callback();
   });
 
-  q.push({ url: 'http://whiskeynerds.com', depthLimit: 0 });
+  q.push({ url, depthLimit: 0 });
 
   q.drain = () => {
     eventEmitter.emit('done');
-    console.log('all items have been processed');
   };
   return eventEmitter;
 }
