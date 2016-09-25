@@ -1,71 +1,10 @@
-import cheerio from 'cheerio-without-node-native';
 import { queue } from 'async';
 import EventEmitter from 'eventemitter3';
 import _ from 'lodash';
-import fetch from 'node-fetch';
-import debug from 'debug';
-
-const debugError = debug('crawler:error');
-
-/**
- * Fetches the url, gets the contents of the url and times the response
- * @method fetchUrl
- * @param  {String}  url website to fetch
- * @return {Promise}     promise returns Object
- */
-export async function fetchUrl(url) {
-  const timeStart = Date.now();
-  let res;
-  try {
-    res = await fetch(url);
-  } catch (err) {
-    debugError(err);
-  }
-  const responseTime = Date.now() - timeStart;
-  const body = await res.text();
-  return { res, body, responseTime };
-}
-
-/**
- * Loads the website contents into cheerio then parses all
- * the links from the webpage and returns them
- * @method parseUrlsFromBody
- * @param  {String}     body The website body
- * @return {Array}           Array of all the links on the webpage
- */
-export function parseUrlsFromBody(body) {
-  const $ = cheerio.load(body);
-  const links = [];
-  $('a').each((i, elem) => {
-    links.push($(elem).attr('href'));
-  });
-  return links;
-}
-
-/**
- * Filters only the urls that point back into the website
- * @method filterInternalUrls
- * @param  {String}           baseUrl base url for the website
- * @param  {Array}            urls    array of urls to filter
- * @return {Array}                    array of filtered links
- */
-function filterInternalUrls(baseUrl, urls) {
-  const compactedUrls = _.compact(urls);
-  return compactedUrls.filter(url =>
-      (url.startsWith(baseUrl) && url !== baseUrl && url !== `${baseUrl}/`) || url.startsWith('/'));
-}
-
-/**
- * Filters duplicate urls so we dont hit the same url twice
- * @method filterDuplicates
- * @param  {Array}         urls     urls from latest webpage
- * @param  {Array}         usedUrls urls that have already been hit
- * @return {Array}                  deduped array of urls
- */
-function filterDuplicates(urls, usedUrls) {
-  const usedUrlsWithSlashes = usedUrls.concat(usedUrls.map(url => `${url}/`));
-  return _.difference(urls, usedUrlsWithSlashes);
-}
+import filterDuplicates from './utils/filter-duplicates';
+import fetchUrl from './utils/fetch-url';
+import parseUrlsFromBody from './utils/parse-urls-from-body';
+import filterExternalUrls from './utils/filter-external-urls';
 
 /**
  * Crawler function which takes a url and max depth limit and returns an event
@@ -87,14 +26,8 @@ export default function crawler({ url, maxDepthLimit = 2 }) {
   const usedUrls = [url];
   const q = queue(async (task, callback) => {
     const currentDepthLimit = task.depthLimit;
-    let result;
+    const result = await fetchUrl(task.url);
 
-    try {
-      result = await fetchUrl(task.url);
-    } catch (err) {
-      debugError(err.stack);
-      return callback(err);
-    }
 
     results.push({
       url: task.url,
@@ -114,7 +47,7 @@ export default function crawler({ url, maxDepthLimit = 2 }) {
 
     if (currentDepthLimit < maxDepthLimit) {
       const urls = parseUrlsFromBody(result.body);
-      const internalUrls = filterInternalUrls(url, urls);
+      const internalUrls = filterExternalUrls(url, urls);
       const internalUniqueUrls = filterDuplicates(internalUrls, _.map(results, 'url'));
       const urlObjs = internalUniqueUrls.map(u => ({
         url: u.startsWith('/') ? `${baseUrl}${u}` : u,

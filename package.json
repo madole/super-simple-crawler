@@ -4,7 +4,7 @@
   "description": "Super simple website crawler with no node dependencies",
   "main": "index.js",
   "scripts": {
-    "test": "nyc ava test/*.js",
+    "test": "cross-env NODE_ENV=test nyc ava test",
     "build": "babel src -d lib"
   },
   "author": "Andrew McDowell <madoliole@gmail.com> (http://madole.github.io/)",
@@ -13,20 +13,19 @@
     "ava": "^0.16.0",
     "babel-cli": "^6.11.4",
     "babel-eslint": "^6.1.2",
+    "babel-plugin-istanbul": "^2.0.1",
     "babel-plugin-transform-async-to-generator": "^6.8.0",
     "babel-plugin-transform-runtime": "^6.12.0",
     "babel-preset-es2015-node4": "^2.1.0",
+    "cross-env": "^3.0.0",
     "eslint": "^3.3.1",
     "eslint-config-airbnb-base": "^5.0.3",
     "eslint-plugin-import": "^1.14.0",
     "fetch-mock": "^5.1.1",
-    "nyc": "^8.1.0",
-    "sinon": "^1.17.5"
+    "nock": "^8.0.0",
+    "nyc": "^8.1.0"
   },
   "ava": {
-    "files": [
-      "test.js"
-    ],
     "source": [
       "src/**/*.js"
     ],
@@ -34,14 +33,22 @@
       "babel-register"
     ]
   },
+  "nyc": {
+    "include": [
+      "src/**/*.js"
+    ],
+    "require": [
+      "babel-register"
+    ],
+    "sourceMap": false,
+    "instrument": false,
+    "reporter": "lcov"
+  },
   "dependencies": {
     "async": "^2.0.1",
-    "babel-preset-es2017": "^6.14.0",
     "babel-runtime": "^6.11.6",
     "cheerio-without-node-native": "^0.20.1",
     "debug": "^2.2.0",
-    "drip": "^1.4.0",
-    "eventemitter": "^0.3.3",
     "eventemitter3": "^2.0.0",
     "lodash": "^4.15.0",
     "node-fetch": "^1.6.1"
