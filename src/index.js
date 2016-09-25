@@ -1,6 +1,6 @@
 import { queue } from 'async';
 import EventEmitter from 'eventemitter3';
-import _ from 'lodash';
+import { map } from 'lodash';
 import filterDuplicates from './utils/filter-duplicates';
 import fetchUrl from './utils/fetch-url';
 import parseUrlsFromBody from './utils/parse-urls-from-body';
@@ -48,7 +48,7 @@ export default function crawler({ url, maxDepthLimit = 2 }) {
     if (currentDepthLimit < maxDepthLimit) {
       const urls = parseUrlsFromBody(result.body);
       const internalUrls = filterExternalUrls(url, urls);
-      const internalUniqueUrls = filterDuplicates(internalUrls, _.map(results, 'url'));
+      const internalUniqueUrls = filterDuplicates(internalUrls, map(results, 'url'));
       const urlObjs = internalUniqueUrls.map(u => ({
         url: u.startsWith('/') ? `${baseUrl}${u}` : u,
         depthLimit: currentDepthLimit + 1,
