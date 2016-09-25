@@ -1,6 +1,6 @@
 {
   "name": "super-simple-crawler",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Super simple website crawler with no node dependencies",
   "main": "index.js",
   "scripts": {
