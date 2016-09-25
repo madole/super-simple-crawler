@@ -1,4 +1,4 @@
-import cheerio from 'cheerio-without-node-native';
+import cheerio from 'cheerio';
 
 /**
  * Loads the website contents into cheerio then parses all
