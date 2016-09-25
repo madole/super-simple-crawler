@@ -1,8 +1,8 @@
 {
   "name": "super-simple-crawler",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Super simple website crawler",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
     "test": "cross-env NODE_ENV=test nyc ava test",
     "build": "babel src -d lib"
