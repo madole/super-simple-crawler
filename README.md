@@ -1,4 +1,4 @@
-## Super Simple Crawler
+## Super Simple Crawler ![travisCI](https://travis-ci.org/madole/super-simple-crawler.svg)
 
 A super simple crawler for crawling websites and reporting back stats.
 
@@ -40,4 +40,4 @@ simpleCrawler takes an object as a parameter.
 
 #### done
 The done event is fired when there are either no more urls to crawl, or the maximum
-depth limit has been reached. 
+depth limit has been reached.
