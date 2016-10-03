@@ -38,11 +38,13 @@ export default function crawler({ url, maxDepthLimit = 2 }) {
 
     eventEmitter.emit('response', {
       url: task.url,
+      path: task.path,
       depthLimit: currentDepthLimit,
       responseTime: result.responseTime,
       status: result.res.status,
       headers: result.res.headers,
       size: result.res._bytes,
+      response: result.res,
     });
 
     if (currentDepthLimit < maxDepthLimit) {
@@ -51,6 +53,7 @@ export default function crawler({ url, maxDepthLimit = 2 }) {
       const internalUniqueUrls = filterDuplicates(internalUrls, map(results, 'url'));
       const urlObjs = internalUniqueUrls.map(u => ({
         url: u.startsWith('/') ? `${baseUrl}${u}` : u,
+        path: u,
         depthLimit: currentDepthLimit + 1,
       }));
       usedUrls.push(urls);

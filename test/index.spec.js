@@ -48,9 +48,11 @@ test.cb('should send an object with url, depthLimit, responseTime, status, and s
   c.on('done', () => {
     const whiskeyRes = responses[1];
     t.truthy(whiskeyRes.url === 'http://whiskeynerds.com/whiskey');
+    t.truthy(whiskeyRes.path === '/whiskey');
     t.truthy(whiskeyRes.depthLimit === 1);
     t.truthy(whiskeyRes.responseTime != null);
     t.truthy(whiskeyRes.size != null);
+    t.truthy(whiskeyRes.response != null);
     t.end();
   });
 });
