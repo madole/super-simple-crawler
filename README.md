@@ -37,8 +37,8 @@ simpleCrawler takes an object as a parameter.
 - responseTime - number: the time taken for the server to respond to the request
 - depthLimit - number: the depth which the URL features in the site
 - size - number: the size, in bytes, of the response
-- path - string: the path of the url eg. '/whiskey'
-- url - string: the full url of eg. 'http://whiskeynerds.com/whiskey'
+- path - string: the path of the url eg. '/glendalough-double-barrel'
+- url - string: the full url of eg. 'http://whiskeynerds.com/glendalough-double-barrel/'
 - response - object: the whole response object
 
 #### done
