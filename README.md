@@ -37,6 +37,9 @@ simpleCrawler takes an object as a parameter.
 - responseTime - number: the time taken for the server to respond to the request
 - depthLimit - number: the depth which the URL features in the site
 - size - number: the size, in bytes, of the response
+- path - string: the path of the url eg. '/whiskey'
+- url - string: the full url of eg. 'http://whiskeynerds.com/whiskey'
+- response - object: the whole response object
 
 #### done
 The done event is fired when there are either no more urls to crawl, or the maximum
