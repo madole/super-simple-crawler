@@ -67,5 +67,11 @@ export default function crawler({ url, maxDepthLimit = 2 }) {
   q.drain = () => {
     eventEmitter.emit('done');
   };
+
+
+  eventEmitter.on('stop', () => {
+    q.drain();
+  });
+
   return eventEmitter;
 }
